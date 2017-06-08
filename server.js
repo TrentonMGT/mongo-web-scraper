@@ -1,4 +1,4 @@
-//Dependencies
+//Dependencies_________________________________________
 const express = require('express');
 const exphbs = require('express-handlebars');
 const bodyParser = require('body-parser');
@@ -32,7 +32,7 @@ app.set('view engine', 'handlebars');
 // ---------------------------------------------------------------------------------------------------------------
 // Connect to localhost if not a production environment
 if(process.env.NODE_ENV == 'production'){
-  mongoose.connect('mongodb://heroku_m40mww70:aoaf7v1bjau8upg0ffvtfrefca@ds111262.mlab.com:11262/heroku_m40mww70');
+  mongoose.connect('MONGODB_URI: mongodb://heroku_8z2dx2j6:umq0mcg5b12k5a6450ijkhauao@ds115712.mlab.com:15712/heroku_8z2dx2j6');
 }
 else{
   mongoose.connect('mongodb://localhost/articleScraper');
@@ -51,9 +51,9 @@ db.once('open', () => {
 
 
 // DROP DATABASE (FOR MY PERSONAL REFERENCE ONLY - YOU CAN IGNORE)
-Article.remove({}, function(err) {
-   console.log('collection removed')
-});
+// Article.remove({}, function(err) {
+//    console.log('collection removed')
+// });
 
 // Import Routes/Controller
 var router = require('./controllers/controller.js');
