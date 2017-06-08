@@ -8,15 +8,15 @@ const cheerio = require('cheerio'); // for web-scraping
 const Comment = require('../models/Note.js');
 const Article = require('../models/Article.js');
 
-router.get('/', (req, res) => {
+router.get('/', function(req, res) {
 
   res.redirect('/scrape');
 
 });
 
-router.get('/articles', (req, res) => {
+router.get('/articles', function(req, res) {
 
-  Article.find().sort({_id: -1}).populate('comments').exec((err, doc) => {
+  Article.find().sort({_id: -1}).populate('comments').exec(function(err, doc) {
     // log any errors
     if (err) {
       console.log(err);
@@ -31,15 +31,15 @@ router.get('/articles', (req, res) => {
 
 });
 
-router.get('/scrape', (req, res) => {
+router.get('/scrape', function(req, res) {
 
-  request('https://news.ycombinator.com/', (error, response, html) => {
+  request('https://news.ycombinator.com/', function(error, response, html) {
 
     var $ = cheerio.load(html);
 
     var titlesArray = [];
 
-    $('.title').each((i, element) => {
+    $('.title').each(function(i, element) {
 
       var result = {};
 
@@ -63,7 +63,7 @@ router.get('/scrape', (req, res) => {
               var entry = new Article(result);
 
               // Save the entry to MongoDB
-              entry.save((err, doc) => {
+              entry.save(function(err, doc) {
                 // log any errors
                 if (err) {
                   console.log(err// or log the doc that was saved to the DB
@@ -94,7 +94,7 @@ router.get('/scrape', (req, res) => {
 
 });
 
-router.post('/add/comment/:id', (req, res) => {
+router.post('/add/comment/:id', function(req, res) {
 
   var articleId = req.params.id;
 
@@ -109,7 +109,7 @@ router.post('/add/comment/:id', (req, res) => {
 
   var entry = new Comment(result);
 
-  entry.save((err, doc) => {
+  entry.save(function(err, doc) {
     // log any errors
     if (err) {
       console.log(err// Or, relate the comment to the article
@@ -122,7 +122,7 @@ router.post('/add/comment/:id', (req, res) => {
         $push: {
           'comments': doc._id
         }
-      }, {new: true}).exec((err, doc) => {
+      }, {new: true}).exec(function(err, doc) {
 
         if (err) {
           console.log(err);
@@ -137,13 +137,13 @@ router.post('/add/comment/:id', (req, res) => {
 });
 
 // Delete a Comment Route
-router.post('/remove/comment/:id', (req, res) => {
+router.post('/remove/comment/:id', function(req, res) {
 
   // Collect comment id
   var commentId = req.params.id;
 
   // Find and Delete the Comment using the Id
-  Comment.findByIdAndRemove(commentId, (err, todo) => {
+  Comment.findByIdAndRemove(commentId, function(err, todo) {
 
     if (err) {
       console.log(err);
